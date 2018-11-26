@@ -1,0 +1,17 @@
+body { 
+margin: 0;
+}
+
+.wrapper{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.btn-secondary{
+    color: white;
+    background-color: #000;
+}
+
+#custom-value{
+    padding: 0.35em;
+}

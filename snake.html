@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+
+        <!-- Responsive Meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap & jQuery -->
+        <link rel=stylesheet href="bootstrap/bootstrap.css">
+        <script type="text/javascript" src="bootstrap/jquery.min.js"></script>
+        <script type="text/javascript" src="bootstrap/bootstrap.js"></script>
+
+
+        <!-- Custom CSS -->
+        <link rel='stylesheet' href='style.css'>
+    </head>
+    <body>
+        <div class='container'>
+
+            <!-- <div>
+                <div id='difficulty'>
+                    
+                    <label>Easy
+                        <input type="radio" value="Easy">
+                    </label>
+                    
+                <label>Normal
+                    <input type="radio" value="Normal">
+                </label>
+                
+                <label>Hard
+                    <input type="radio" value="Hard">
+                </label>
+                
+                <label>Extreme
+                    <input type="radio" value="Extreme">
+                </label>
+                
+                <label>Custom Difficulty
+                    <input type="radio" value="Custom">
+                </label>
+                
+                <label>Bebis
+                    <input type="text" id="custom_value">
+                </label>
+            </div> -->
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" value="easy" class="btn btn-secondary">Easy</button>
+                <button type="button" value="normal" class="btn btn-secondary">Normal</button>
+                <button type="button" value="hard" class="btn btn-secondary">Hard</button>
+                <button type="button" value="extreme" class="btn btn-secondary">Extreme</button>
+                <button type="button" value="custom" class="btn btn-secondary">Custom</button>
+                <input type=number id="custom-value" value=5 size=2 max="99" min="1">
+            </div>
+            
+            
+            <a id='reset'>Reset</a>
+            <a id='pause'>Pause</a>
+            
+            <div id='game-container'>
+                <canvas id="canvas" ></canvas>
+            </div>
+            <script src="snake.js"></script>
+            <script src="control.js"></script>
+            <div class="controls">
+
+                <div class='d-flex flex-column'>   
+                    <h2>Move</h2>
+                    <span>W A S D</span>
+                        <span><b>&UpArrow;&LeftArrow;&RightArrow;&DownArrow;</b></span>
+                </div>
+                        
+            </div>
+
+        </div>
+    </body>
+</html>
+        
