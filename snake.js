@@ -12,19 +12,28 @@ var parent = document.getElementById('game-container');
 
 console.log(parent);
 
-w = parent.offsetWidth;
-// Set canvas height to 70 percent of viewport height
-parent.style.height = h = $(window).height() * 0.70;
 
 
+
+var fps = 5; // easy 5, normal 8, hard 12, extreme 16
+var blockSize = 25;
+
+var viewportHeight = $(window).height();
+
+// Set canvasHeight to 70 percent of viewportHeight
+var canvasHeight = (viewportHeight * 0.70);
+
+// Set canvas' parent height to canvasHeight minus the result of a modulo sum of itself.
+parent.style.height = h = canvasHeight-(canvasHeight%blockSize);
+
+
+w = parent.offsetWidth - parent.offsetWidth%blockSize;
 
 canvas.width = w;
 canvas.height = h;
 
-var fps = 5; // easy 5, normal 8, hard 12, extreme 16
 
 var c = canvas.getContext('2d');
-var blockSize = 25;
 
 var myGame = new Game(blockSize, c);
 
@@ -33,9 +42,18 @@ function Game(blockSize, renderer){
     this.blockSize = blockSize;
     this.c = renderer;
     
-    this.width  = Math.floor(w / this.blockSize);  
-    this.height = Math.floor(h / this.blockSize); 
+    this.width  = (w / this.blockSize)-1;  
+    this.height = (h / this.blockSize)-1; 
+    console.log(h);
     
+    // Todo : add more settings
+    this.settings = {
+        solidBorders: true,
+        change: (type, value) => {
+                this.settings[type] = eval(value);
+        }
+    };
+
     this.map = [];
     this.food = [];
     
@@ -103,6 +121,7 @@ function Game(blockSize, renderer){
             this.c.font="200% Arial";
             
             this.c.strokeStyle = "#000";
+            this.c.textAlign = "center";
             this.c.strokeText(this.pauseMessage, w/2, h/2);
             this.c.fillText(this.pauseMessage, w/2, h/2);
             
@@ -113,6 +132,7 @@ function Game(blockSize, renderer){
             
             this.drawFood();
             this.player.move();   
+            console.log(this.player.x, this.player.y);
         }
     }
     
@@ -161,7 +181,8 @@ function Game(blockSize, renderer){
         this.gameOver = () => {
             this.gameStopped = true;
             this.ended = 1;
-            this.pauseMessage = 'Game Over, score: ' + this.player.length;
+            console.log(this.player.length, this.player.startLength);
+            this.pauseMessage = 'Game Over, score: ' + (this.player.length - this.player.startLength);
         }
     
         // Initialize food 
@@ -172,7 +193,8 @@ function Game(blockSize, renderer){
 function Snake(x, y, dx, dy, length){
     
     this.length = length;
-    
+    this.startLength = length;
+
     this.x = x;
     this.y = y;
 
@@ -245,7 +267,11 @@ function Snake(x, y, dx, dy, length){
             case 'p':
             case 'escape':
             if(!myGame.ended){
-                myGame.gameStopped = !myGame.gameStopped;
+                if($('#options-container').hasClass('in')){
+                    $('#options-container').modal("hide");
+                } else{
+                    myGame.gameStopped = !myGame.gameStopped;
+                }
             }
             break;
             
@@ -300,9 +326,13 @@ function Snake(x, y, dx, dy, length){
             myGame.drawBlock(this.body[i]['x'], this.body[i]['y'], "#fff");
         }
  
-            this.x += this.dx;
-            
-            if(this.x > myGame.width || this.x < 0){
+        this.x += this.dx;
+        
+        if(this.x > myGame.width || this.x < 0){
+            if(myGame.settings.solidBorders){
+                this.die();
+            } else{
+
                 if(this.x > myGame.width){
                     this.x = 0;
                 }
@@ -310,15 +340,21 @@ function Snake(x, y, dx, dy, length){
                     this.x = myGame.width;
                 }
             }
+        }
 
-            this.y += this.dy;
+        this.y += this.dy;
             
         if(this.y > myGame.height || this.y < 0){
-            if(this.y > myGame.height){
-                this.y = 0;
-            }
-            else{
-                this.y = myGame.height;
+            if(myGame.settings.solidBorders){
+                this.die();
+            } else{
+
+                if(this.y > myGame.height){
+                    this.y = 0;
+                }
+                else{
+                    this.y = myGame.height;
+                }
             }
         }
         

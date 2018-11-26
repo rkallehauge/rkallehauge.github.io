@@ -60,7 +60,42 @@
             
             <a id='reset'>Reset</a>
             <a id='pause'>Pause</a>
+            <a id='options'>Options</a>
             
+            <div id='options-container' class='modal modal-sm'>
+
+                <div class='modal-content'>
+
+                <div class='modal-header'>
+                    <h2>Options</h2>
+                </div>
+
+                    <div> <!-- Wall Options -->
+                        <h3>Walls</h3>
+                        <div class='form-group'>
+                            <div class='radio'>
+                                <label class='radio-inline'>
+                                    <input type='radio' name='solidBorders' checked value='0'>
+                                    Looping edges
+                                </label>
+                            </div>
+                            <div class='radio'>
+                                <label class='radio-inline'>
+                                    <input type='radio' name='solidBorders' value='1'>
+                                    Solid edges
+                                </label>
+                            </div>
+                        </div><!-- Form Group-->    
+                    </div>
+
+                    <div>
+                        
+                    </div>
+                        
+                </div><!-- Modal content -->
+                
+            </div><!-- Modal -->
+
             <div id='game-container'>
                 <canvas id="canvas" ></canvas>
             </div>

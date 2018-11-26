@@ -12,6 +12,16 @@ $('#pause').on('click', () => {
     myGame.gameStopped = !myGame.gameStopped;
 });
 
+$('#options').on('click', () => {
+    myGame.gameStopped = true;
+    $('#options-container').modal();
+});
+
+$('.modal input').on('click', (e) => {
+    var type = e.target.name;
+    var value = e.target.value;
+    myGame.settings.change(type, value);
+});
 
 function changeDifficulty(value){
     
