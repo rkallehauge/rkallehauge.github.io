@@ -1,0 +1,34 @@
+body { 
+margin: 0;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.wrapper{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.btn-secondary{
+    color: white;
+    background-color: #000;
+}
+
+#custom-value{
+    padding: 0.35em;
+}
+
+.modal{
+    margin: 0 auto;
+}
+
+.modal-content{
+    padding: 1em;
+}
+
+.jscolor {
+    z-index: 1060;
+}
