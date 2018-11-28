@@ -28,3 +28,7 @@ a {
 .modal-content{
     padding: 1em;
 }
+
+.jscolor {
+    z-index: 1060;
+}

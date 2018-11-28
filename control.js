@@ -23,7 +23,11 @@ $('.modal input').on('click', (e) => {
     myGame.settings.change(type, value);
 });
 
-function changeDifficulty(value){
+$('.jscolor').on('change', (e) => {
+    myGame.settings.change('snakeColor', e.target.style.backgroundColor);
+});
+
+function changeDifficulty(value){   
     
     switch(value){
         case 'easy':

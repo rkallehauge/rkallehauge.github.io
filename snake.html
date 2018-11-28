@@ -13,6 +13,8 @@
         <script type="text/javascript" src="bootstrap/jquery.min.js"></script>
         <script type="text/javascript" src="bootstrap/bootstrap.js"></script>
 
+        <!-- Color Picker -->
+        <script type="text/javascript" src="lib/jscolor.js"></script>
 
         <!-- Custom CSS -->
         <link rel='stylesheet' href='style.css'>
@@ -67,7 +69,10 @@
                 <div class='modal-content'>
 
                 <div class='modal-header'>
-                    <h2>Options</h2>
+                    <h2 class='modal-title'>Options</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
 
                     <div> <!-- Wall Options -->
@@ -88,7 +93,11 @@
                         </div><!-- Form Group-->    
                     </div>
 
-                    <div>
+                    <div> <!-- Player Options -->
+                        <h3>Player</h3>
+                        <div class='form-group'>
+                            <input class='jscolor'>
+                        </div>
                         
                     </div>
                         

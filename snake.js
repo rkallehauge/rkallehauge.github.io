@@ -12,9 +12,6 @@ var parent = document.getElementById('game-container');
 
 console.log(parent);
 
-
-
-
 var fps = 5; // easy 5, normal 8, hard 12, extreme 16
 var blockSize = 25;
 
@@ -26,12 +23,10 @@ var canvasHeight = (viewportHeight * 0.70);
 // Set canvas' parent height to canvasHeight minus the result of a modulo sum of itself.
 parent.style.height = h = canvasHeight-(canvasHeight%blockSize);
 
-
 w = parent.offsetWidth - parent.offsetWidth%blockSize;
 
 canvas.width = w;
 canvas.height = h;
-
 
 var c = canvas.getContext('2d');
 
@@ -45,12 +40,21 @@ function Game(blockSize, renderer){
     this.width  = (w / this.blockSize)-1;  
     this.height = (h / this.blockSize)-1; 
     console.log(h);
-    
+
     // Todo : add more settings
     this.settings = {
-        solidBorders: true,
+        solidBorders: false, 
+        snakeColor : "#fff",   
+        randomFoodColor : true, 
         change: (type, value) => {
-                this.settings[type] = eval(value);
+            if(type==='snakeColor'){
+                if(value.includes('rgb')){
+                    this.player.color = value;
+                } else{
+                    this.player.color = "#" + value;
+                }
+            }
+            this.settings[type] = value;
         }
     };
 
@@ -84,18 +88,21 @@ function Game(blockSize, renderer){
     this.spawnFood = () => {
         console.log('Spawning food');
         var coords = this.randomCoordinates();
-
+        var color = "#f00";
+        if(this.settings.randomFoodColor){
+            color = this.randomColor();
+        }
         console.log('Spawned food at:',coords[0],coords[1]);
         this.map[coords[0]][coords[1]] = 1;
         
         console.log([coords[0], coords[1]]);
-        this.food.push([coords[0], coords[1]]);
+        this.food.push([coords[0], coords[1], color]);
         
     }
     
     this.drawFood = () => {
         for(var i = 0; i < this.food.length; i++){
-            this.drawBlock(this.food[i][0], this.food[i][1], '#f00');
+            this.drawBlock(this.food[i][0], this.food[i][1], this.food[i][2]);
         }
     }
     
@@ -177,6 +184,22 @@ function Game(blockSize, renderer){
         }
             return [x,y];
         }
+
+        this.randomColor = () => {
+            var r,g,b,s;
+            r = Math.floor(Math.random()*256);
+            g = Math.floor(Math.random()*256);
+            b = Math.floor(Math.random()*256);
+            var c = [r,g,b];
+            s = "#";
+            console.log(c); 
+            for(var i = 0; i < c.length; i++){
+                if(c[i] < 16)
+                     s += "0";
+                s += c[i].toString(16);
+            }
+            return s;
+        };
         
         this.gameOver = () => {
             this.gameStopped = true;
@@ -198,15 +221,18 @@ function Snake(x, y, dx, dy, length){
     this.x = x;
     this.y = y;
 
+    this.color = '#fff';
+
     this.safePos = {
         x: undefined,
         y: undefined
     };
-    
+
+    // Directional velocities
     this.dx = dx;
     this.dy = dy;
     
-    // this.body[n][x & y]
+    // this.body[n][x, y, color]
     
     this.body = [];
     
@@ -216,6 +242,7 @@ function Snake(x, y, dx, dy, length){
         var arr = [];
         arr['x'] = (this.x-(i+1));
         arr['y'] = this.y;
+        arr['color'] = 
         arr['status'] = "old";
         arr['start'] = [this.x, this.y];
 
@@ -323,7 +350,7 @@ function Snake(x, y, dx, dy, length){
                 }
                 
                 // Draw body element
-            myGame.drawBlock(this.body[i]['x'], this.body[i]['y'], "#fff");
+            myGame.drawBlock(this.body[i]['x'], this.body[i]['y'], this.color);
         }
  
         this.x += this.dx;
@@ -373,7 +400,7 @@ function Snake(x, y, dx, dy, length){
         }
 
         // Draw head
-        myGame.drawBlock(this.x, this.y, '#fff');
+        myGame.drawBlock(this.x, this.y, this.color);
     }
 
     this.eat = (index) => {
