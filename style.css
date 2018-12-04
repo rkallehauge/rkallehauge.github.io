@@ -7,7 +7,6 @@
 .wrapper {
     max-width: 100%;
     margin: 0 auto;
-    min-height: 200px;
     background-color: rgba(255,255,255,0.8);
 }
 @media only screen and (min-width: 1200px) {
@@ -24,6 +23,11 @@ a{
     text-decoration: none;
 }
 
+img{
+    display: block;
+    max-width: 100%;
+}
+
 ul{
     list-style: none;
 }
@@ -34,21 +38,53 @@ li, a{
 
 header{
     background-color: #615550; /*Brown Granite*/
+
+    position: relative;
 }
 footer {
     background-color: #615550; /*Brown Granite*/
 }
 
-nav ul{
-    border-bottom: 1px solid #ccc;
+nav{
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: space-between;
+}
+
+nav ul{
+    transition: 0.3s;
+    max-height: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    background-color:  #615550; /*Brown Granite*/
+}
+
+nav ul.display{
+    max-height: 10em;
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (min-width: 768px){
+    a#mobile-menu{
+        display: none;
+    }
+
+    nav ul{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        max-height: initial;
+        position: static;
+        transform: initial;
+        border-bottom: 1px solid #ccc;
+    }
 }
 
 nav li a{
-    padding: 1em;
-    font-size: 200%;
+    padding: 0.5em;
+    font-size: 150%;
     color: #fff; /*Sweet Corn*/
     transition: 0.25s;
 }
@@ -57,9 +93,104 @@ nav li a:hover{
     color: #99f;
     
 }
+#mobile-menu{
+    display: block;
+    width: 3em;
+    padding: 0.25em;
+}
 
+.login{
+    font-size: 150%;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0.5em;
+    transition: 0.25s;
+    position: relative;
+}
+.login:hover{
+    background-color: rgba(255,255,255,0.2);
+    color: #99f;
+}
+
+.login label, .login input{
+    text-align: center;
+    display: block;
+    border: 0;
+}
+.login label{
+    padding: 0.2em 0 0 0;
+}
+
+.login #login-form{
+    background-color:  #615550; /*Brown Granite*/
+    display: flex;
+    position: absolute;
+    overflow-y: hidden;
+    max-height: 0;
+    transition: 0.3s;
+    right: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    flex-direction: column;
+}
+
+.login #login-form.display{
+    max-height: 10em;
+}
 
 .faded-background{
     opacity: 0.5;
     position: absolute;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+}
+.content > div{
+    width: 100%;
+}
+@media only screen and (min-width: 768px) {
+    .content{
+        flex-direction: row;
+    }
+    .content > div{
+        width: 50%;
+    }
+}
+
+article{
+    display: flex;
+    align-items: center;
+    padding: 0.25em;
+}
+
+article h2, article p{
+    padding: 0.5em 0;
+}
+
+article img{
+    max-width: 30%;
+    padding: 0.5em;
+}
+
+article a{
+    padding: 0.25em 0;
+    color: blue;
+    text-align: center;
+}
+article a:hover{
+    background-color: rgba(0,0,0,0.2);
+}
+
+.social-logo{
+    max-width: 2em;
+    display: inline;
+}
+
+footer > .wrapper{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
