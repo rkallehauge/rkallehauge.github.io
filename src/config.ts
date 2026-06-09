@@ -53,7 +53,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/rasmus.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+	avatar: "assets/images/rasmus.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "Rasmus Wissing Kallehauge",
 	bio: "Datamatiker studerende @ UCL Erhvervsakademi og professionshøjskole",
 	links: [

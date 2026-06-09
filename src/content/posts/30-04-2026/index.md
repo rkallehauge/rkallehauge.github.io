@@ -26,7 +26,7 @@ Now the device is ready to start snorting some data.
 We run:
 ```airomon-ng wlan0mon``` 
 And find some potential targets:
-![airomon-ng result]("./airomon start.png")
+![airomon-ng result](airomon-start.png "Airodump output")
 We get some further info, that the target access point is running on channel 12 and after looking up WLAN channels we can also deduce it is running on 2.4GHz.
 
 # Get a valid WPA handshake 
@@ -47,16 +47,16 @@ Using the laws of physics of course! Whilst 5GHz is faster and arguably the supe
 
 # Back on track
 Now we continue disconnecting and re-connecting the phone from the Wi-Fi until we capture a WPA handshake. And et voila, we got him... Or well, me. I pwned myself. Which is okay, I gave myself permission before attempting this.
-![WPA Handshake found]("./wpa handshake.png")
+![WPA Handshake found](wpa-handshake.png "WPA Handshake for target router")
 
 # Cracking the WPA handshake
 This step was easier in my head, I knew from the start I was gonna crack the password using the CUDA cores on my GPU, as they're usually better fit for the task than using a CPU. I had however underestimated the complexity of the password already on my router, so I changed it to something simpler. 9 letters alphanumeric, with one large symbol. Still, too complex, so I changed it again, to something even simpler, just 8 latin characters, no numbers, no special chars, nothing, just that. Also probably have to mention that every time I changed the password, I had to go re-capture a new WPA handshake, I did this 3 times. Anyhow, I got there in the end.
 
 First you convert the capture file to a format usable by hashcat
-![Converting .cap file to .hc22000]("./konvertering af capfil til hashcat.png")
+![Converting .cap file to .hc22000](konvert-cap-hashcat.png "Converting capture file to hashcat format")
 
 Then you throw the file at hashcat
-![Hashcat going at it]("./hashcat undervejs.png")
+![Hashcat going at it](hashcat-undervejs.png "Hashcat cracking the file")
 
 Also, I should mention that I gave hashcat a pattern for the password, 8 chars in a row. Still took insanely long. In the end I gave 5 known chars of the password just to finally land at the resulting terminal.
-![Extracted password]("./hashcat resultat.png")
+![Extracted password](hashcat-resultat.png "Password found in hashcat")
