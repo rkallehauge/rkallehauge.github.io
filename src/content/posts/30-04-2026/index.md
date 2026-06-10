@@ -50,7 +50,7 @@ Now we continue disconnecting and re-connecting the phone from the Wi-Fi until w
 ![WPA Handshake found](wpa-handshake.png "WPA Handshake for target router")
 
 # Cracking the WPA handshake
-This step was easier in my head, I knew from the start I was gonna crack the password using the CUDA cores on my GPU, as they're usually better fit for the task than using a CPU. I had however underestimated the complexity of the password already on my router, so I changed it to something simpler. 9 letters alphanumeric, with one large symbol. Still, too complex, so I changed it again, to something even simpler, just 8 latin characters, no numbers, no special chars, nothing, just that. Also probably have to mention that every time I changed the password, I had to go re-capture a new WPA handshake, I did this 3 times. Anyhow, I got there in the end.
+This step was easier in my head, I knew from the start I was gonna crack the password using the CUDA cores on my GPU, as they're usually better fit for the task than using a CPU. I had however underestimated the complexity of the password already on my router, so I changed it to something simpler. 9 letters alphanumeric, with one uppercase symbol. Still, too complex, so I changed it again, to something even simpler, just 8 latin characters, no numbers, no special chars, nothing, just that. Also probably have to mention that every time I changed the password, I had to go re-capture a new WPA handshake, I did this 3 times. Anyhow, I got there in the end.
 
 First you convert the capture file to a format usable by hashcat
 ![Converting .cap file to .hc22000](konvert-cap-hashcat.png "Converting capture file to hashcat format")
@@ -60,3 +60,5 @@ Then you throw the file at hashcat
 
 Also, I should mention that I gave hashcat a pattern for the password, 8 chars in a row. Still took insanely long. In the end I gave 5 known chars of the password just to finally land at the resulting terminal.
 ![Extracted password](hashcat-resultat.png "Password found in hashcat")
+
+From what I have gathered during this experiment, which was actually against my initial assumption, is that a normal person without excessive ressources cannot reliably break modern Wi-Fi encryption, namely WPA2, this is a stark contrast to the older WEP standard, which was essentially cracked just by listening on the network capturing IVs.
