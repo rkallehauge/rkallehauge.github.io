@@ -32,13 +32,34 @@ There are a bunch of ways to combat this, none of them are perfect soltuions and
 When a user logs out we know that their JWT needs to be invalidated, so further requests with the same JWT should be treated as unauthenticated. How do we do this?
 Firstly, we need to be able to identify each JWT, this is done through a JWT identifier, or a JTI, which is just a GUID we append to the JWT. With this, we can keep a record of which JWTs have been invalidated, this recordkeeping is usually done through caching, in my case using Valkey. Valkey is essentially the same as Redis, it actually is Redis... or rather an open-source fork of Redis, which was made a while back after the licensing of Redis changed into a triple licensed faux open-source amalgamantion. Anyhow, it is interchangable with Redis, which is the most important part here.
 (Non-relevant code has been left out)
-1. Get Redis Config from .env and setup IConnectionMultiplexor service
+1. Add a unique identifier to user claims
 ```csharp
-  string redisConfig = configuration.GetValue<string>("Redis:Configuration");
+  private string GenerateToken(User user)
+  {
 
-  builder.Services.AddSingleton<IConnectionMultiplexer>(
-      ConnectionMultiplexer.Connect(redisConfig)
-  );
+      var claims = new[]
+      {
+          new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+          new Claim(ClaimTypes.Name, user.Username),
+          new Claim(ClaimTypes.Role, user.Role.ToString()),
+          new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Jwt id for token blacklisting
+      };
+      var key = new SymmetricSecurityKey(
+          Encoding.UTF8.GetBytes(_config["JWT:SigningKey"])
+      );
+
+      var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+      var token = new JwtSecurityToken(
+          issuer: _config["Jwt:Issuer"],
+          audience: _config["Jwt:Audience"],
+          claims: claims,
+          expires: DateTime.UtcNow.AddMinutes(10), // limited lifespan for token, if token gets compromised we limit damage extent, but don't limit lifespan so much it puts exessive strain on server
+          signingCredentials: creds
+      );
+
+      return new JwtSecurityTokenHandler().WriteToken(token);
+  }
 ```
 2. Setup token invalidation
 ```csharp
@@ -82,7 +103,7 @@ builder.Services.AddAuthentication("Bearer")
 This method has it's drawbacks, one of which is the overhead we add to every single request caused by checking the cache, meaning added latency and excessive memory usage. However, it allows for us to blacklist singular JWTs (granular blacklisting), meaning we don't have to terminate all the users sessions at once, which is definitely useful for some applications, e.g. you're logged on multiple devices, and only need to log out of a single one, a public library pc or something. However, at times, we DO need to terminate all user sessions, if a user is compromised or has their password reset, which this method is essentially useless for, we can however use:
 
 # Token Versioning
-Which is essentially just a number we track for each user and check with each request. If we get a token with the same version as we have stored, Token(5) == DB/Cache(5), the token has not been deprecated, and the request goes on through. If there is a mismatch however, we know to ignore the request. That's essentially all there is to it.
+Which is essentially just a number we track for each user and check with each request. If we get a token with the same version as we have stored, IncomingToken(5) == DB/Cache(5), the token has not been deprecated, and the request goes on through. If there is a mismatch however, we know to ignore the request. That's essentially all there is to it.
 
 1. Set up token versioning
 ```csharp
@@ -92,7 +113,7 @@ Which is essentially just a number we track for each user and check with each re
       return affected == 1;
   }
 ```
-2. Append version to each token
+2. Add a token version to user claims
 ```csharp
  private string GenerateToken(User user)
  {
