@@ -16,14 +16,17 @@ One of the core elements of JWTs are their lack of state, which is also somehow 
 However, if you somehow bypass the authentication step and just get the proof of authentication, you are granted access. This is called a replay attack, which can be done through a myriad of methods, some easier than others, the methodology is the same regardless. 
 
 # Replay attack
-  a. Acquire bearer token
-    -Done through XSS, network sniffing, malware on victim pc or other ways
-  b. Set token
-    -Easily done with a http client or burpsuite
-  c. Authenticate
-    -Send a request with the bearer token set to see whether it worked
-  d. Steal data or whatever
-    -Sell on darknet or extort victim (don't actually do any of this)
+1. Acquire bearer token
+   - Done through XSS, network sniffing, malware on victim PC, or other methods
+
+2. Set token
+   - Easily done with an HTTP client or Burp Suite
+
+3. Authenticate
+   - Send a request with the bearer token set to verify it works
+
+4. Steal data or whatever
+   - Sell on darknet or extort victim (don't actually do any of this)
 
 # How can we mitigate this?
 There are a bunch of ways to combat this, none of them are perfect soltuions and each have their own limitations, but using them together definitely minimizes the drawbacks. Two of which I have implemented in my current project, first of which is:
